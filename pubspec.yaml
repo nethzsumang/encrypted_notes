@@ -32,6 +32,7 @@ dependencies:
   encrypt:
   flutter_secure_storage:
   go_router:
+  password_hash_plus:
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -11,9 +11,9 @@ class IndexPage extends StatelessWidget {
     var plainstr = 'Lorem ipsum dolor sit amet consectetur elit, adespescing elit.';
     var encrypted = EncryptionLibrary().encryptContent(plainstr, k1, response['iv']);
     var decrypted = EncryptionLibrary().decryptContent(encrypted, k1, response['iv']);
-    print('Plain String: ' + plainstr);
-    print('Encrypted: ' + encrypted);
-    print('Decrypted: ' + decrypted);
+    print(plainstr);
+    print(encrypted);
+    print(decrypted);
     return const Text('Hello, World!');
   }
 

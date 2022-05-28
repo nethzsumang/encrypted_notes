@@ -22,14 +22,13 @@ class EncryptionLibrary {
   generateKeys(String password) {
     var iv = IV.fromUtf8(generateRandomString(16));
     var salt = String.fromCharCodes(Salt.generate(16));
-    String k1 = generateRandomString(128);
+    String k1 = generateRandomString(16);
 
     PBKDF2 generator = PBKDF2();
     Uint8List pbkdf2 = Uint8List.fromList(generator.generateKey(password, salt, 1000, 32));
     List<int> k2 = pbkdf2.sublist(0, 16);
     List<int> k3 = pbkdf2.sublist(16, 32);
     Key encrypterKey = Key.fromBase64(base64Encode(k2));
-    print(encrypterKey.length);
 
     final encrypter = Encrypter(AES(encrypterKey, mode: AESMode.cbc));
     var encryptedK1 = encrypter.encrypt(k1, iv: iv);
@@ -70,23 +69,23 @@ class EncryptionLibrary {
   }
 
   // Encrypt content
-  // This function encrypts [content] with base64 encoded [key] and base64 encoded [iv].
+  // This function encrypts [content] with plain string [key] and base64 encoded [iv].
   // It returns an encrypted string.
   encryptContent(String content, String key, String encodedIv) {
-    Key encrypterKey = Key.fromBase64(key);
+    Key encrypterKey = Key(Uint8List.fromList(key.codeUnits));
     IV iv = IV.fromBase64(encodedIv);
 
     final encrypter = Encrypter(AES(encrypterKey, mode: AESMode.cbc));
-    return encrypter.encrypt(content, iv: iv);
+    return encrypter.encrypt(content, iv: iv).base64;
   }
 
   // Decrypt content
-  // This function decrypts [encryptedContent] with base64 encoded [key] and
+  // This function decrypts [encryptedContent] with plain string [key] and
   // base64 encoded [iv]
   decryptContent(String encryptedContent, String key, String encodedIv) {
-    Key encrypterKey = Key.fromBase64(key);
+    Key encrypterKey = Key(Uint8List.fromList(key.codeUnits));
     IV iv = IV.fromBase64(encodedIv);
-    Encrypted encrypted = Encrypted.fromUtf8(encryptedContent);
+    Encrypted encrypted = Encrypted.fromBase64(encryptedContent);
 
     final encrypter = Encrypter(AES(encrypterKey, mode: AESMode.cbc));
     return encrypter.decrypt(encrypted, iv: iv);

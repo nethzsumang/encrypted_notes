@@ -13,6 +13,8 @@ class IndexPage extends StatefulWidget {
 }
 
 class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
+  bool hasSetupAccount = false;
+
   @override
   void afterFirstLayout(BuildContext context) async {
     const secureStorage = FlutterSecureStorage();
@@ -21,8 +23,8 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
     String? k3 = await secureStorage.read(key: 'k3');
     String? salt = await secureStorage.read(key: 'salt');
 
-    if (encryptionKey == null || iv == null || k3 == null || salt == null) {
-      showWelcomeDialog(context);
+    if (encryptionKey != null && iv != null && k3 != null && salt != null) {
+      hasSetupAccount = true;
     }
   }
 
@@ -31,22 +33,4 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
     return const Text('Hello, World!');
   }
 
-  void showWelcomeDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => CustomDialog(
-        title: 'Welcome!',
-        width: 300,
-        height: 300,
-        children: const [
-          Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-              child: Text(
-                  'It seems that you haven\'t set up yet. Please select one of these buttons to continue.'
-              )
-          )
-        ]
-      )
-    );
-  }
 }

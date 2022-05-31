@@ -1,9 +1,9 @@
 import 'package:after_layout/after_layout.dart';
-import 'package:encrypted_notes/app/components/reusable/custom_dialog.dart';
 import 'package:encrypted_notes/app/libraries/encryption_library.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class IndexPage extends StatefulWidget {
   const IndexPage({Key? key}) : super(key: key);
@@ -30,7 +30,48 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('Hello, World!');
+    if (hasSetupAccount) {
+      GoRouter.of(context).go('/home');
+    }
+    return Scaffold(
+       body: SizedBox(
+          height: 300,
+          width: 300,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.only(left: 20, top: 30, right: 20),
+                child: TextField(
+                  decoration: InputDecoration(
+                      labelText: 'Username',
+                      hintText: 'Enter your username'
+                  ),
+                )
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+                child: TextField(
+                  decoration: InputDecoration(
+                      labelText: 'Password',
+                      hintText: 'Enter your password'
+                  ),
+                  obscureText: true,
+                )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Center(
+                  child: TextButton(
+                    onPressed: () { },
+                    child: const Text('Login')
+                  ),
+                )
+              )
+            ]
+          ),
+      )
+    );
   }
-
 }

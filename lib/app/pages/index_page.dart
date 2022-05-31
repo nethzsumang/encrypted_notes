@@ -41,7 +41,7 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
          currentStep: currentStep,
          steps: const [
            Step(
-             title: Text('Account Login'),
+             title: Text('Account Setup'),
              content: LoginForm()
            ),
            Step(

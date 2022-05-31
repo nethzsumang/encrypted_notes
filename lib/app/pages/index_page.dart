@@ -54,22 +54,37 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
            )
          ],
          controlsBuilder: (BuildContext context, ControlsDetails details) {
-           return Center(
-             child: Column(
-               children: <Widget>[
-                 Padding(
-                   padding: const EdgeInsets.only(right: 30),
-                   child: TextButton(
-                     onPressed: details.onStepContinue,
-                     child: const Text('Next'),
+           return Column(
+             mainAxisAlignment: MainAxisAlignment.center,
+             crossAxisAlignment: CrossAxisAlignment.center,
+             children: <Widget>[
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 crossAxisAlignment: CrossAxisAlignment.center,
+                 children: [
+                   Padding(
+                       padding: const EdgeInsets.only(right: 30),
+                       child: SizedBox(
+                         width: 150,
+                         child: ElevatedButton(
+                           style: ElevatedButton.styleFrom(
+                             primary: const Color(0xfff44336)
+                           ),
+                           onPressed: details.onStepCancel,
+                           child: const Text('Back'),
+                         )
+                       )
+                   ),
+                   SizedBox(
+                     width: 150,
+                     child: ElevatedButton(
+                       onPressed: details.onStepContinue,
+                       child: const Text('Next'),
+                     )
                    )
-                 ),
-                 TextButton(
-                   onPressed: details.onStepCancel,
-                   child: const Text('Back'),
-                 ),
-               ],
-             )
+                 ],
+               ),
+             ],
            );
          },
          onStepContinue: () {

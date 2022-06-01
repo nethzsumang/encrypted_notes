@@ -1,4 +1,6 @@
 import 'package:after_layout/after_layout.dart';
+import 'package:encrypted_notes/app/components/index/account_preparation.dart';
+import 'package:encrypted_notes/app/components/index/account_recovery.dart';
 import 'package:encrypted_notes/app/components/index/login_form.dart';
 import 'package:encrypted_notes/app/libraries/encryption_library.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -46,11 +48,11 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
            ),
            Step(
              title: Text('Account Privacy and Recovery'),
-             content: Text('Hey')
+             content: AccountRecovery()
            ),
            Step(
              title: Text('Key Generation and Preparation'),
-             content: Text('Hello')
+             content: AccountPreparation()
            )
          ],
          controlsBuilder: (BuildContext context, ControlsDetails details) {

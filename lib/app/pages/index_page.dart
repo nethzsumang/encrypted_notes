@@ -1,5 +1,4 @@
 import 'package:after_layout/after_layout.dart';
-import 'package:encrypted_notes/app/components/index/account_preparation.dart';
 import 'package:encrypted_notes/app/components/index/account_recovery.dart';
 import 'package:encrypted_notes/app/components/index/login_form.dart';
 import 'package:encrypted_notes/app/libraries/encryption_library.dart';
@@ -45,10 +44,6 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
            Step(
              title: Text('Account Setup'),
              content: LoginForm()
-           ),
-           Step(
-             title: Text('Key Generation and Preparation'),
-             content: AccountPreparation()
            ),
            Step(
                title: Text('Account Privacy and Recovery'),

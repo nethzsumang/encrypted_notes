@@ -47,13 +47,13 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
              content: LoginForm()
            ),
            Step(
-             title: Text('Account Privacy and Recovery'),
-             content: AccountRecovery()
-           ),
-           Step(
              title: Text('Key Generation and Preparation'),
              content: AccountPreparation()
-           )
+           ),
+           Step(
+               title: Text('Account Privacy and Recovery'),
+               content: AccountRecovery()
+           ),
          ],
          controlsBuilder: (BuildContext context, ControlsDetails details) {
            return Column(

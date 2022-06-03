@@ -97,7 +97,6 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
                       backgroundColor: Colors.lightGreen,
                       textColor: Colors.black
                     );
-                    print(response);
                     bool saveSuccess = await authenticationService.saveKeyOfExistingUser(
                       credentials['username'],
                       credentials['password'],

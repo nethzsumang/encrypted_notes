@@ -37,6 +37,7 @@ dependencies:
   flutter_easyloading:
   http:
   flutter_dotenv:
+  flutter_bloc:
 
 
   # The following adds the Cupertino Icons font to your application.

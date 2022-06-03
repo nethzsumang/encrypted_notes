@@ -2,6 +2,9 @@ import 'package:after_layout/after_layout.dart';
 import 'package:encrypted_notes/app/components/index/account_recovery.dart';
 import 'package:encrypted_notes/app/components/index/login_form.dart';
 import 'package:encrypted_notes/app/libraries/encryption_library.dart';
+import 'package:encrypted_notes/app/services/authentication_service.dart';
+import 'package:encrypted_notes/app/store/auth_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:flutter/material.dart';
@@ -36,68 +39,83 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
     if (hasSetupAccount) {
       GoRouter.of(context).go('/home');
     }
-    return Scaffold(
-       body: Stepper(
-         type: StepperType.horizontal,
-         currentStep: currentStep,
-         steps: const [
-           Step(
-             title: Text('Account Setup'),
-             content: LoginForm()
-           ),
-           Step(
-               title: Text('Account Privacy and Recovery'),
-               content: AccountRecovery()
-           ),
-         ],
-         controlsBuilder: (BuildContext context, ControlsDetails details) {
-           return Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             crossAxisAlignment: CrossAxisAlignment.center,
-             children: <Widget>[
-               Row(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 crossAxisAlignment: CrossAxisAlignment.center,
-                 children: [
-                   Padding(
-                       padding: const EdgeInsets.only(right: 30),
-                       child: SizedBox(
-                         width: 150,
-                         child: ElevatedButton(
-                           style: ElevatedButton.styleFrom(
-                             primary: const Color(0xfff44336)
-                           ),
-                           onPressed: details.onStepCancel,
-                           child: const Text('Back'),
-                         )
-                       )
-                   ),
-                   SizedBox(
-                     width: 150,
-                     child: ElevatedButton(
-                       onPressed: details.onStepContinue,
-                       child: const Text('Next'),
-                     )
-                   )
-                 ],
-               ),
-             ],
-           );
-         },
-         onStepContinue: () {
-           if (currentStep <= 1) {
-             setState(() => currentStep += 1);
-           }
-         },
-         onStepCancel: () {
-           if (currentStep >= 1) {
-             setState(() => currentStep -= 1);
-           }
-         },
-         onStepTapped: (index) {
-           setState(() => currentStep = index);
-         },
-       )
+    
+    AuthenticationService authenticationService = AuthenticationService();
+    return BlocProvider(
+      create: (BuildContext context) => AuthBloc(),
+      child: Scaffold(
+          body: BlocBuilder<AuthBloc, Map>(
+            builder: (context, credentials) {
+              return Stepper(
+                type: StepperType.horizontal,
+                currentStep: currentStep,
+                steps: const [
+                  Step(
+                      title: Text('Account Setup'),
+                      content: LoginForm()
+                  ),
+                  Step(
+                      title: Text('Account Privacy and Recovery'),
+                      content: AccountRecovery()
+                  ),
+                ],
+                controlsBuilder: (BuildContext context, ControlsDetails details) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.only(right: 30),
+                              child: SizedBox(
+                                  width: 150,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: const Color(0xfff44336)
+                                    ),
+                                    onPressed: details.onStepCancel,
+                                    child: const Text('Back'),
+                                  )
+                              )
+                          ),
+                          SizedBox(
+                              width: 150,
+                              child: ElevatedButton(
+                                onPressed: details.onStepContinue,
+                                child: const Text('Next'),
+                              )
+                          )
+                        ],
+                      ),
+                    ],
+                  );
+                },
+                onStepContinue: () async {
+                  if (currentStep == 0) {
+                    Map response = await authenticationService.checkIfUserExists(credentials['username']);
+                    if (response['success'] == true) {
+
+                    }
+                  }
+                  // if (currentStep <= 1) {
+                  //   setState(() => currentStep += 1);
+                  // }
+                },
+                onStepCancel: () {
+                  if (currentStep >= 1) {
+                    setState(() => currentStep -= 1);
+                  }
+                },
+                onStepTapped: (index) {
+                  setState(() => currentStep = index);
+                },
+              );
+            }
+          )
+      )
     );
   }
 }

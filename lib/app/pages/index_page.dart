@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class IndexPage extends StatefulWidget {
@@ -25,11 +26,8 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
   void afterFirstLayout(BuildContext context) async {
     const secureStorage = FlutterSecureStorage();
     String? encryptionKey = await secureStorage.read(key: 'k1');
-    String? iv = await secureStorage.read(key: 'iv');
-    String? k3 = await secureStorage.read(key: 'k3');
-    String? salt = await secureStorage.read(key: 'salt');
 
-    if (encryptionKey != null && iv != null && k3 != null && salt != null) {
+    if (encryptionKey != null) {
       hasSetupAccount = true;
     }
   }
@@ -53,10 +51,6 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
                   Step(
                       title: Text('Account Setup'),
                       content: LoginForm()
-                  ),
-                  Step(
-                      title: Text('Account Privacy and Recovery'),
-                      content: AccountRecovery()
                   ),
                 ],
                 controlsBuilder: (BuildContext context, ControlsDetails details) {
@@ -94,15 +88,63 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
                   );
                 },
                 onStepContinue: () async {
-                  if (currentStep == 0) {
-                    Map response = await authenticationService.checkIfUserExists(credentials['username']);
-                    if (response['success'] == true) {
-
+                  Map response = await authenticationService.checkIfUserExists(credentials['username']);
+                  if (response['success'] == true) {
+                    Fluttertoast.showToast(
+                      msg: 'User found. Validating account...',
+                      toastLength: Toast.LENGTH_SHORT,
+                      timeInSecForIosWeb: 3,
+                      backgroundColor: Colors.lightGreen,
+                      textColor: Colors.black
+                    );
+                    print(response);
+                    bool saveSuccess = await authenticationService.saveKeyOfExistingUser(
+                      credentials['username'],
+                      credentials['password'],
+                      response['data']
+                    );
+                    if (saveSuccess) {
+                      Fluttertoast.showToast(
+                          msg: 'Validation successful. Redirecting...',
+                          toastLength: Toast.LENGTH_SHORT,
+                          timeInSecForIosWeb: 3,
+                          backgroundColor: Colors.green,
+                          textColor: Colors.black
+                      );
+                      GoRouter.of(context).go('/home');
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: 'Account validation failed. Possibly incorrect password.',
+                          toastLength: Toast.LENGTH_SHORT,
+                          timeInSecForIosWeb: 3,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.black
+                      );
                     }
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: 'User not found. Creating new keys...',
+                        toastLength: Toast.LENGTH_SHORT,
+                        timeInSecForIosWeb: 3,
+                        backgroundColor: Colors.grey,
+                        textColor: Colors.black
+                    );
+                    Map keys = await authenticationService.createNewKeysForUser(credentials['password']);
+                    await authenticationService.saveNewUser({
+                      'username': credentials['username'],
+                      'salt': keys['salt'],
+                      'iv': keys['iv'],
+                      'k3': keys['k3'],
+                      'k1': keys['encryptedK1']
+                    });
+                    Fluttertoast.showToast(
+                        msg: 'Keys successfully generated and saved.',
+                        toastLength: Toast.LENGTH_SHORT,
+                        timeInSecForIosWeb: 3,
+                        backgroundColor: Colors.lightGreen,
+                        textColor: Colors.black
+                    );
                   }
-                  // if (currentStep <= 1) {
-                  //   setState(() => currentStep += 1);
-                  // }
                 },
                 onStepCancel: () {
                   if (currentStep >= 1) {

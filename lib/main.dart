@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:encrypted_notes/app/router/routes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -16,7 +17,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp.router(
     routeInformationParser: _router.routeInformationParser,
     routerDelegate: _router.routerDelegate,
-    title: title
+    title: title,
+    builder: EasyLoading.init()
   );
 
   final _router = router;

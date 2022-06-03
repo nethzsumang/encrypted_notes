@@ -34,10 +34,11 @@ class EncryptionLibrary {
     var encryptedK1 = encrypter.encrypt(k1, iv: iv);
 
     return {
-      'k1': encryptedK1.base64,
+      'k1': k1,
+      'encryptedK1': encryptedK1.base64,
       'iv': iv.base64,
       'k3': Key.fromBase64(base64Encode(k3)).base64,
-      'salt': salt
+      'salt': base64Encode(salt.codeUnits)
     };
   }
 
@@ -48,7 +49,7 @@ class EncryptionLibrary {
   getEncryptKeyFromPassword(String password, String salt, String iv, String encryptedK1, String k3) {
     // generate PBKDF2 string using supplied salt and password
     PBKDF2 generator = PBKDF2();
-    Uint8List pbkdf2 = Uint8List.fromList(generator.generateKey(password, salt, 1000, 32));
+    Uint8List pbkdf2 = Uint8List.fromList(generator.generateKey(password, String.fromCharCodes(base64Decode(salt)), 1000, 32));
     List<int> k2 = pbkdf2.sublist(0, 16);
     List<int> generatedK3 = pbkdf2.sublist(16, 32);
 

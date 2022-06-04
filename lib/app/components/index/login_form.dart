@@ -78,42 +78,42 @@ class LoginForm extends StatelessWidget {
     Map response = await authenticationService.checkIfUserExists(credentials['username']);
     if (response['success'] == true) {
       Fluttertoast.showToast(
-          msg: 'User found. Validating account...',
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 3,
-          backgroundColor: Colors.lightGreen,
-          textColor: Colors.black
+        msg: 'User found. Validating account...',
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.lightGreen,
+        textColor: Colors.black
       );
       bool saveSuccess = await authenticationService.saveKeyOfExistingUser(
-          credentials['username'],
-          credentials['password'],
-          response['data']
+        credentials['username'],
+        credentials['password'],
+        response['data']
       );
       if (saveSuccess) {
         Fluttertoast.showToast(
-            msg: 'Validation successful. Redirecting...',
-            toastLength: Toast.LENGTH_SHORT,
-            timeInSecForIosWeb: 3,
-            backgroundColor: Colors.green,
-            textColor: Colors.black
+          msg: 'Validation successful. Redirecting...',
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 3,
+          backgroundColor: Colors.green,
+          textColor: Colors.black
         );
         GoRouter.of(context).go('/home');
       } else {
         Fluttertoast.showToast(
-            msg: 'Account validation failed. Possibly incorrect password.',
-            toastLength: Toast.LENGTH_SHORT,
-            timeInSecForIosWeb: 3,
-            backgroundColor: Colors.red,
-            textColor: Colors.black
+          msg: 'Account validation failed. Possibly incorrect password.',
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 3,
+          backgroundColor: Colors.red,
+          textColor: Colors.black
         );
       }
     } else {
       Fluttertoast.showToast(
-          msg: 'User not found. Creating new keys...',
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 3,
-          backgroundColor: Colors.grey,
-          textColor: Colors.black
+        msg: 'User not found. Creating new keys...',
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.grey,
+        textColor: Colors.black
       );
       Map keys = await authenticationService.createNewKeysForUser(credentials['password']);
       await authenticationService.saveNewUser({
@@ -124,11 +124,11 @@ class LoginForm extends StatelessWidget {
         'k1': keys['encryptedK1']
       });
       Fluttertoast.showToast(
-          msg: 'Keys successfully generated and saved.',
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 3,
-          backgroundColor: Colors.lightGreen,
-          textColor: Colors.black
+        msg: 'Keys successfully generated and saved.',
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.lightGreen,
+        textColor: Colors.black
       );
     }
   }

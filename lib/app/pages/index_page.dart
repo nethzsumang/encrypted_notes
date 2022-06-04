@@ -16,7 +16,6 @@ class IndexPage extends StatefulWidget {
 
 class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
   bool hasSetupAccount = false;
-  int currentStep = 0;
 
   @override
   void afterFirstLayout(BuildContext context) async {

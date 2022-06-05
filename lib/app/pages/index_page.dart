@@ -35,8 +35,13 @@ class IndexPageState extends State<IndexPage> with AfterLayoutMixin<IndexPage> {
 
     return BlocProvider(
       create: (BuildContext context) => AuthBloc(),
-      child: const Scaffold(
-          body: LoginForm()
+      child: Scaffold(
+          body: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              LoginForm()
+            ],
+          )
       )
     );
   }

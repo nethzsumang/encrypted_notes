@@ -10,15 +10,17 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return SizedBox(
       height: 300,
-      width: 300,
+      width: width * 0.5,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 30, right: 20),
+              padding: const EdgeInsets.only(top: 30),
               child: BlocBuilder<AuthBloc, Map>(
                 builder: (context, credentials) {
                   return TextFormField(
@@ -35,7 +37,7 @@ class LoginForm extends StatelessWidget {
               )
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+              padding: const EdgeInsets.only(top: 20),
               child: BlocBuilder<AuthBloc, Map>(
                 builder: (context, credentials) {
                   return TextFormField(
@@ -52,21 +54,26 @@ class LoginForm extends StatelessWidget {
                 },
               )
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 35),
-              child: BlocBuilder<AuthBloc, Map>(
-                builder: (context, credentials) {
-                  return SizedBox(
-                      width: 150,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await onLoginFormSubmit(context, credentials);
-                        },
-                        child: const Text('Next'),
-                      )
-                  );
-                }
-              )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.only(top: 35),
+                    child: BlocBuilder<AuthBloc, Map>(
+                        builder: (context, credentials) {
+                          return SizedBox(
+                              width: 200,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  await onLoginFormSubmit(context, credentials);
+                                },
+                                child: const Text('Next'),
+                              )
+                          );
+                        }
+                    )
+                )
+              ],
             )
           ]
       ),

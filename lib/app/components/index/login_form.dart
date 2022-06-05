@@ -58,20 +58,20 @@ class LoginForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                    padding: const EdgeInsets.only(top: 35),
-                    child: BlocBuilder<AuthBloc, Map>(
-                        builder: (context, credentials) {
-                          return SizedBox(
-                              width: 200,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  await onLoginFormSubmit(context, credentials);
-                                },
-                                child: const Text('Next'),
-                              )
-                          );
-                        }
-                    )
+                  padding: const EdgeInsets.only(top: 35),
+                  child: BlocBuilder<AuthBloc, Map>(
+                    builder: (context, credentials) {
+                      return SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await onLoginFormSubmit(context, credentials);
+                          },
+                          child: const Text('Next'),
+                        )
+                      );
+                    }
+                  )
                 )
               ],
             )

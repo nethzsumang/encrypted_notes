@@ -34,6 +34,23 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
     return Scaffold(
       body: const Text('Hello'),
       appBar: AppBar(title: const Text('Encrypted Notes')),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Encrypted Notes'),
+            ),
+            ListTile(
+              title: const Text('Home'),
+              onTap: () {},
+            ),
+          ],
+        )
+      )
     );
   }
   

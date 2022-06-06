@@ -8,9 +8,11 @@ class NoteService {
         'success': false
       };
     }
+
+    List notes = response['notes'];
     return {
       'success': true,
-      'data': response['notes']
+      'data': notes
     };
   }
 }

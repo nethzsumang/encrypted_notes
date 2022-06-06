@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class NotesEvent {}
 class NotesFetchDoneEvent extends NotesEvent {
-  List<Map> data;
+  List data;
 
   NotesFetchDoneEvent(this.data);
 }

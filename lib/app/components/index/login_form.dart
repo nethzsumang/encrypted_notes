@@ -106,7 +106,7 @@ class LoginForm extends StatelessWidget {
           backgroundColor: Colors.green,
           textColor: Colors.black
         );
-        await secureStorageLibrary.setValue('userNo', response['data']['id']);
+        await secureStorageLibrary.setValue('userNo', response['data']['id'].toString());
         GoRouter.of(context).go('/home');
       } else {
         Fluttertoast.showToast(

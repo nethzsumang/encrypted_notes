@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:encrypted_notes/app/components/home/note_list.dart';
+import 'package:encrypted_notes/app/store/auth_bloc.dart';
 import 'package:encrypted_notes/app/store/notes_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:after_layout/after_layout.dart';
@@ -27,8 +29,6 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
       hasSetupAccount = false;
       return;
     }
-
-    // fetch notes
   }
 
   @override
@@ -37,31 +37,19 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
       GoRouter.of(context).push('/');
     }
 
-    return Scaffold(
-      body: const Text('Hello'),
-      appBar: AppBar(title: const Text('Encrypted Notes')),
-      drawer: BlocBuilder<NotesBloc, List>(
-        builder: (context, notes) {
-          return Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  const DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                    ),
-                    child: Text('Encrypted Notes'),
-                  ),
-                  ListTile(
-                    title: const Text('Home'),
-                    onTap: () {},
-                  ),
-                ],
-              )
-          );
-        },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (BuildContext context) => AuthBloc()),
+        BlocProvider(create: (BuildContext context) => NotesBloc())
+      ],
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Encrypted Notes')),
+        body: BlocBuilder<NotesBloc, List>(
+          builder: (context, notes) {
+            return const NoteList();
+          }
+        )
       )
     );
   }
-  
 }

@@ -48,7 +48,12 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
           builder: (context, notes) {
             return const NoteList();
           }
-        )
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          onPressed: () {},
+          child: const Icon(Icons.note_add),
+        ),
       )
     );
   }

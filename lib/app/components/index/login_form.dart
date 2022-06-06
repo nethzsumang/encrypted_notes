@@ -84,6 +84,7 @@ class LoginForm extends StatelessWidget {
   onLoginFormSubmit(BuildContext context, Map credentials) async {
     AuthenticationService authenticationService = AuthenticationService();
     SecureStorageLibrary secureStorageLibrary = SecureStorageLibrary();
+    final goRouter = GoRouter.of(context);
     Map response = await authenticationService.checkIfUserExists(credentials['username']);
     if (response['success'] == true) {
       bool saveSuccess = await authenticationService.saveKeyOfExistingUser(
@@ -94,7 +95,7 @@ class LoginForm extends StatelessWidget {
       if (saveSuccess) {
         EasyLoading.showSuccess('Logged in successfully.');
         await secureStorageLibrary.setValue('userNo', response['data']['id'].toString());
-        GoRouter.of(context).go('/home');
+        goRouter.go('/home');
       } else {
         EasyLoading.showError('Account validation failed. Possibly incorrect password.');
       }

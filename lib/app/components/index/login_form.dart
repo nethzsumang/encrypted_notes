@@ -1,5 +1,6 @@
 import 'package:encrypted_notes/app/store/auth_bloc.dart';
 import 'package:encrypted_notes/app/services/authentication_service.dart';
+import 'package:encrypted_notes/app/libraries/secure_storage_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -82,6 +83,7 @@ class LoginForm extends StatelessWidget {
 
   onLoginFormSubmit(BuildContext context, Map credentials) async {
     AuthenticationService authenticationService = AuthenticationService();
+    SecureStorageLibrary secureStorageLibrary = SecureStorageLibrary();
     Map response = await authenticationService.checkIfUserExists(credentials['username']);
     if (response['success'] == true) {
       Fluttertoast.showToast(
@@ -104,6 +106,7 @@ class LoginForm extends StatelessWidget {
           backgroundColor: Colors.green,
           textColor: Colors.black
         );
+        await secureStorageLibrary.setValue('userNo', response['data']['id']);
         GoRouter.of(context).go('/home');
       } else {
         Fluttertoast.showToast(

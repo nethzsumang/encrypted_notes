@@ -24,4 +24,11 @@ class UserRepository {
     );
     return jsonDecode(response.body);
   }
+
+  Future<Map> getUserNotes(int id) async {
+    var apiUrl = dotenv.get('API_URL', fallback: 'http://localhost');
+    var url = Uri.parse('$apiUrl/api/users/$id/notes');
+    var response = await http.get(url);
+    return jsonDecode(response.body);
+  }
 }

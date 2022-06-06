@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:encrypted_notes/app/store/notes_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:after_layout/after_layout.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,16 +15,20 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
-  bool hasSetupAccount = false;
+  bool hasSetupAccount = true;
 
   @override
   void afterFirstLayout(BuildContext context) async {
     const secureStorage = FlutterSecureStorage();
     String? encryptionKey = await secureStorage.read(key: 'k1');
+    String? userNo = await secureStorage.read(key: 'userNo');
 
-    if (encryptionKey != null) {
-      hasSetupAccount = true;
+    if (encryptionKey == null || userNo == null) {
+      hasSetupAccount = false;
+      return;
     }
+
+    // fetch notes
   }
 
   @override
@@ -34,22 +40,26 @@ class HomePageState extends State<HomePage> with AfterLayoutMixin<HomePage> {
     return Scaffold(
       body: const Text('Hello'),
       appBar: AppBar(title: const Text('Encrypted Notes')),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Encrypted Notes'),
-            ),
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {},
-            ),
-          ],
-        )
+      drawer: BlocBuilder<NotesBloc, List>(
+        builder: (context, notes) {
+          return Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  const DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                    child: Text('Encrypted Notes'),
+                  ),
+                  ListTile(
+                    title: const Text('Home'),
+                    onTap: () {},
+                  ),
+                ],
+              )
+          );
+        },
       )
     );
   }
